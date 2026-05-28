@@ -15,6 +15,26 @@ const { sequelize } = require('./models/pg/index');
 connectMongo(process.env.MONGO_URI).catch(() => {});
 require('./models/pg/index');
 
+// Memory logging (Render 512MB debugging)
+function formatMb(bytes) {
+    return `${Math.round((Number(bytes) || 0) / 1024 / 1024)}MB`;
+}
+function logMem(tag) {
+    try {
+        const m = process.memoryUsage();
+        console.log(
+            `[mem] ${tag} rss=${formatMb(m.rss)} heapUsed=${formatMb(m.heapUsed)} heapTotal=${formatMb(m.heapTotal)} ext=${formatMb(m.external)}`
+        );
+    } catch (_) {}
+}
+const MEMLOG_ENABLED =
+    String(process.env.MEMLOG || '').trim() === '1' ||
+    String(process.env.MEMLOG || '').trim().toLowerCase() === 'true';
+const MEMLOG_INTERVAL_MIN = Math.min(
+    60,
+    Math.max(1, parseInt(process.env.MEMLOG_INTERVAL_MIN || '5', 10) || 5)
+);
+
 const authRoutes = require('./routes/auth');
 const playlistRoutes = require('./routes/playlists');
 const { router: searchRoutes } = require('./routes/search');
@@ -29,6 +49,28 @@ const streamRoutes = require('./routes/stream');
 app.set('trust proxy', 1);
 
 app.use(express.json({ limit: '10mb' }));
+
+if (MEMLOG_ENABLED) {
+    logMem('boot');
+    setInterval(() => logMem('interval'), MEMLOG_INTERVAL_MIN * 60 * 1000).unref?.();
+    app.use((req, res, next) => {
+        const url = req.originalUrl || req.url || '';
+        const heavy =
+            url.startsWith('/api/search') ||
+            url.startsWith('/api/genre') ||
+            url.startsWith('/api/artist-discography') ||
+            url.startsWith('/api/recommendations');
+        if (!heavy) return next();
+
+        const started = Date.now();
+        logMem(`> ${req.method} ${url}`);
+        res.on('finish', () => {
+            logMem(`< ${req.method} ${url} ${res.statusCode} ${Date.now() - started}ms`);
+        });
+        next();
+    });
+}
+
 app.use(session({
     secret: process.env.SESSION_SECRET || 'super_secret_key',
     resave: false,

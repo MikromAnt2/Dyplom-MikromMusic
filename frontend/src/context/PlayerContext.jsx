@@ -88,8 +88,18 @@ export function PlayerProvider({ children }) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
+            keepalive: true,
             body: JSON.stringify({ song: payload })
-        }).catch((err) => console.error(err));
+        })
+            .then((res) => {
+                if (res?.ok) return;
+                if (res?.status === 401) {
+                    pushGuestListening(normalized.youtubeId);
+                    return;
+                }
+                console.warn('[history] save failed:', res?.status);
+            })
+            .catch((err) => console.warn('[history] save error:', err));
     };
 
     // toggleLike: перемикає лайк треку — POST /api/like

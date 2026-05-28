@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../context/LocaleContext';
+import { useToast } from '../context/ToastContext';
 
 // Profile: редагування профілю — ім'я, email, аватар
 export default function Profile() {
     const { user, setUser } = useAuth();
     const { t } = useLocale();
+    const { showToast } = useToast();
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -36,13 +38,13 @@ export default function Profile() {
         const file = e.target.files[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
-                alert(t('profile.fileTooBig'));
+                showToast(t('profile.fileTooBig'), 'error');
                 return;
             }
 
             const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif'];
             if (!allowedTypes.includes(file.type)) {
-                alert(t('profile.fileType'));
+                showToast(t('profile.fileType'), 'error');
                 return;
             }
 
@@ -74,20 +76,21 @@ export default function Profile() {
             const res = await fetch('/api/user/profile', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ displayName: name, email: email, avatar: avatar })
             });
 
             if (res.ok) {
                 const updatedUser = await res.json();
                 setUser(updatedUser);
-                alert(t('profile.updated'));
+                showToast(t('profile.updated'), 'success');
             } else {
                 const data = await res.json();
-                alert(data.error || t('profile.updateFail'));
+                showToast(data.error || t('profile.updateFail'), 'error');
             }
         } catch (err) {
             console.error(err);
-            alert(t('common.connectionError'));
+            showToast(t('common.connectionError'), 'error');
         }
     };
 

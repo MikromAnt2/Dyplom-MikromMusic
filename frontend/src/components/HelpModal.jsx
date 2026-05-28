@@ -130,6 +130,11 @@ export default function HelpModal() {
                                         </p>
                                     </div>
 
+                                    <div className="help_box">
+                                        <strong className="help_box_title">{t('help.deployNoteTitle')}</strong>
+                                        <p className="help_note">{t('help.deployNoteText')}</p>
+                                    </div>
+
                                     {!user && (
                                         <div className="help_box help_box--accent">
                                             <strong className="help_box_title help_box_title--accent">

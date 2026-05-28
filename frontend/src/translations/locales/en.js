@@ -176,6 +176,8 @@ export default {
         feature3: 'Home feed with recommendations and genre browse.',
         feature4: 'Artist pages and track context menus.',
         feature5: '“Continue listening” after you reload the page.',
+        deployNoteTitle: 'Demo/deploy note',
+        deployNoteText: 'The deployed demo has only ~512MB RAM. At peak moments the service may temporarily fail to load some data or fail to start playback on the first try — refresh the page or try again.',
         tipTitle: 'Tip',
         tipText: 'Press ? at the bottom left to open the',
         tipLink: 'keyboard shortcuts',
