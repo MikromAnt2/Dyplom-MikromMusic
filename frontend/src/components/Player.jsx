@@ -15,7 +15,6 @@ import {
 import { goToArtistPage } from '../utils/artistNav';
 import * as yt from '../lib/youtubePlayer';
 import EqControl from './EqControl';
-import PipControl from './PipControl';
 import ShareLinkButton from './ShareLinkButton';
 import { useShare } from '../hooks/useShare';
 import { useLocale } from '../context/LocaleContext';
@@ -455,11 +454,6 @@ export default function Player() {
                             ></div>
                         </div>
                         <EqControl disabled={!currentSong} />
-                        <PipControl
-                            disabled={!currentSong}
-                            isFullPlayerOpen={isFullPlayerOpen}
-                            onCollapse={toggleFullPlayer}
-                        />
                     </div>
                 </div>
             </div>
