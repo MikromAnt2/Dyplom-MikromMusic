@@ -1,7 +1,7 @@
 const { AUTH_HOME_LIMITS } = require('./constants');
 const { findClusterArtists } = require('./scoring');
 const { normalizeArtistKey, toArtistCard } = require('./utils');
-const { getYtClient } = require('./sources');
+const { Innertube } = require('youtubei.js');
 const { enrichArtistMedia } = require('./mediaQuality');
 const {
   isUcArtistId,
@@ -14,6 +14,12 @@ const { resolveChannelIdForAuthor } = require('./artistAlbums');
 const { enrichArtistsMonthlyListeners } = require('../../utils/artistSubs');
 
 const L = AUTH_HOME_LIMITS;
+
+// getYtClient: локальний Innertube клієнт (уникаємо циклічного require через `./sources` → `routes/search`)
+const ytClientPromise = Innertube.create().catch(() => null);
+async function getYtClient() {
+  return ytClientPromise;
+}
 
 // flattenArtistNodes: збирає вузли артистів з дерева Innertube
 function flattenArtistNodes(node, acc, depth = 0) {

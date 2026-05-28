@@ -10,7 +10,6 @@ backend/coverage/
 backend/cache/jest_cache_*
 backend/cache/*.json_exp
 
-# app caches (project root / backend)
 backend/*Cache.json
 backend/genreCache.json
 backend/tracksCache.json
@@ -18,11 +17,12 @@ backend/cache/
 backend/logs/
 *.log
 
+*-player-script.js
+
 .DS_Store
 Thumbs.db
 .idea/
 
-# Windows / VSCode / Cursor
 .vscode/
 .cursor/
 *.swp

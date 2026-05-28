@@ -15,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLocale } from "../context/LocaleContext";
 import { getGuestListeningIds } from "../utils/guestSession";
 import { normalizeTrack } from "../utils/track";
-import { buildGenresList } from "../i18n/genreMeta";
+import { buildGenresList } from "../translations/genreMeta";
 
 const COMMUNITY_LIMIT = 20;
 

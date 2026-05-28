@@ -20,6 +20,98 @@ const {
 const { isMongoConnected } = require('../utils/mongo');
 
 const { get: tracksCacheGet, set: tracksCacheSet } = createPersistentCache('tracksCache.json');
+const { Innertube } = require('youtubei.js');
+
+// Innertube client для YT Music пошуку (краще для артистів/треків, ніж Data API search)
+const ytMusicClientPromise = Innertube.create().catch(() => null);
+
+function getText(val) {
+    if (!val) return '';
+    if (typeof val === 'string' || typeof val === 'number') return String(val);
+    if (val.text) return val.text;
+    if (Array.isArray(val.runs)) return val.runs.map((r) => r.text).join('');
+    if (typeof val.toString === 'function') return val.toString();
+    return '';
+}
+
+function parseDurationToSeconds(input) {
+    if (!input) return 0;
+    if (typeof input === 'number' && Number.isFinite(input)) return Math.max(0, Math.round(input));
+    if (typeof input === 'object' && Number.isFinite(input.seconds)) return Math.max(0, Math.round(input.seconds));
+    const s = String(input).trim();
+    if (!s) return 0;
+    const parts = s.split(':').map((p) => parseInt(p, 10)).filter((n) => Number.isFinite(n));
+    if (!parts.length) return 0;
+    // mm:ss або hh:mm:ss
+    let out = 0;
+    for (const n of parts) out = out * 60 + n;
+    return out;
+}
+
+function pickThumbUrl(obj) {
+    const lists = [
+        obj?.thumbnails,
+        obj?.thumbnail?.thumbnails,
+        obj?.thumbnailRenderer?.musicThumbnailRenderer?.thumbnail?.thumbnails
+    ];
+    for (const list of lists) {
+        if (!Array.isArray(list) || !list.length) continue;
+        const last = list[list.length - 1];
+        const url = last?.url || '';
+        if (url) return url.startsWith('//') ? `https:${url}` : url;
+    }
+    return '';
+}
+
+async function searchTracksViaYtMusic(query, limit = 20) {
+    const yt = await ytMusicClientPromise;
+    if (!yt?.music?.search) return [];
+    try {
+        const res = await yt.music.search(query, { type: 'song' });
+        const nodes = [];
+        const walk = (node, depth = 0) => {
+            if (!node || depth > 25) return;
+            if (Array.isArray(node)) return node.forEach((n) => walk(n, depth + 1));
+            if (typeof node !== 'object') return;
+            nodes.push(node);
+            if (node.contents) walk(node.contents, depth + 1);
+            if (node.items) walk(node.items, depth + 1);
+            if (node.results) walk(node.results, depth + 1);
+        };
+        walk(res?.songs?.contents || res?.results || res?.contents);
+
+        const out = [];
+        const seen = new Set();
+        for (const n of nodes) {
+            const youtubeId = n?.youtubeId || n?.videoId || n?.video_id || n?.id;
+            if (!youtubeId || seen.has(youtubeId)) continue;
+            const title = getText(n?.title) || getText(n?.name);
+            const author =
+                getText(n?.author?.name) ||
+                getText(n?.artists?.[0]?.name) ||
+                getText(n?.author) ||
+                '';
+            const duration = parseDurationToSeconds(n?.duration?.seconds || n?.duration?.text || n?.length);
+            if (!title) continue;
+            seen.add(youtubeId);
+            out.push({
+                youtubeId: String(youtubeId),
+                title,
+                author,
+                channelId: String(n?.author?.id || n?.channelId || ''),
+                image: pickThumbUrl(n) || `https://i.ytimg.com/vi/${youtubeId}/mqdefault.jpg`,
+                duration: duration || 0,
+                album: 'Single',
+                type: 'video'
+            });
+            if (out.length >= limit) break;
+        }
+        return out;
+    } catch (e) {
+        console.warn('[search] yt.music.search failed:', e?.message || e);
+        return [];
+    }
+}
 
 // loadYtApiKeys: збирає ключі YouTube API — з YT_API_KEYS і YT_API_KEY у .env
 function loadYtApiKeys() {
@@ -118,7 +210,8 @@ async function runInfiniteTracksSearch({ query = '', channelId = '', pageToken =
     const cached = tracksCacheGet(cacheKey);
     if (cached) return cached;
 
-    const ytQuery = query && !channelId ? `${query} song -shorts -cover -reaction -tutorial` : query;
+    // NOTE: `-cover` занадто агресивний фільтр — він ховає релевантні треки (зокрема коли шукаємо по артисту).
+    const ytQuery = query && !channelId ? `${query} song -shorts -reaction -tutorial` : query;
 
     let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30`;
     if (ytQuery) url += `&q=${encodeURIComponent(ytQuery)}`;
@@ -168,13 +261,26 @@ router.get('/api/search/tracks', async (req, res) => {
     const pageSize = Math.min(Math.max(Number(req.query.pageSize) || 20, 5), 30);
 
     try {
+        // 1) YT Music (Innertube) — дає значно кращу релевантність для артистів/назв треків
+        const musicItems = pageToken ? [] : await searchTracksViaYtMusic(query, 24);
+
+        // 2) Google Data API — для добору, пагінації, і коли Innertube не повернув нічого
         const raw = await runInfiniteTracksSearch({
             query,
             channelId: '',
             pageToken,
             pageSize: 30
         });
-        const items = enhanceSearchTracksForQuery(raw.items, query, pageSize);
+
+        const merged = [];
+        const seen = new Set();
+        for (const t of [...musicItems, ...(raw.items || [])]) {
+            if (!t?.youtubeId || seen.has(t.youtubeId)) continue;
+            seen.add(t.youtubeId);
+            merged.push(t);
+        }
+
+        const items = enhanceSearchTracksForQuery(merged, query, pageSize);
         res.json({ items, nextPageToken: raw.nextPageToken || null });
     } catch (err) {
         console.error('/api/search/tracks', err);

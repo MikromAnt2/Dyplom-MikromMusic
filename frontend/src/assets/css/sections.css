@@ -1791,6 +1791,17 @@ input[type="checkbox"].track_checkbox:checked::after,
     transition: color 0.2s, transform 0.2s;
 }
 
+.btn_add_music_icon .add_track_icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-image: url(../images/icons2.png);
+    background-repeat: no-repeat;
+    background-size: 22px auto; 
+    background-position: 0px -62px;
+    opacity: 0.9;
+}
+
 .btn_add_music_icon:hover:not(:disabled) {
     color: #fff;
     transform: scale(1.1);
@@ -1799,6 +1810,14 @@ input[type="checkbox"].track_checkbox:checked::after,
 .btn_add_music_icon:disabled {
     color: #a855f7;
     cursor: default;
+}
+
+.btn_add_music_icon:disabled .add_track_icon,
+.btn_add_music_icon .add_track_icon--active {
+    background-image: url(../images/icons2.png);
+    background-position: 0px -89px;
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(45%) sepia(85%) saturate(2405%) hue-rotate(248deg) brightness(101%) contrast(96%);
 }
 
 .add_table_header {

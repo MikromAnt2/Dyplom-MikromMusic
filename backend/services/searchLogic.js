@@ -97,9 +97,24 @@ function enhanceSearchTracksForQuery(items, query, limit = 20) {
 
   if (!q) return enhanced.slice(0, limit);
 
-  return enhanced
+  const qKey = normalizeSearchKey(q);
+  const scored = enhanced
     .map((t) => ({ ...t, _score: scoreSearchTrack(t, q) }))
-    .filter((t) => t._score > -800)
+    .filter((t) => t._score > -800);
+
+  // Коли користувач шукає по артисту (короткий запит на кшталт "Mili"),
+  // сильно піднімаємо треки, де author або title містить запит (щоб не з'їжджало в "рандом").
+  for (const t of scored) {
+    const authorKey = normalizeSearchKey(t.author);
+    const titleKey = normalizeSearchKey(t.title);
+    if (qKey && (authorKey.includes(qKey) || titleKey.includes(qKey))) {
+      t._score += 2500;
+    }
+    if (qKey && authorKey === qKey) t._score += 6000;
+    if (qKey && titleKey.startsWith(qKey)) t._score += 800;
+  }
+
+  return scored
     .sort((a, b) => b._score - a._score)
     .slice(0, limit)
     .map(({ _score, _channelRaw, ...t }) => t);

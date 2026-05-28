@@ -9,7 +9,7 @@ import BackButton from '../components/BackButton';
 import { usePlayer } from '../context/PlayerContext';
 import { useToast } from '../context/ToastContext';
 import { useLocale } from '../context/LocaleContext';
-import { getLocalizedGenre } from '../i18n/genreMeta';
+import { getLocalizedGenre } from '../translations/genreMeta';
 
 // GenrePage: сторінка жанру — треки, артисти, альбоми з API
 export default function GenrePage() {

@@ -726,12 +726,13 @@ export default function Playlist() {
                                         <div className="at_col_artist">{song.author}</div>
                                         <div className="at_col_album">{song.album || 'Single'}</div>
                                         <div className="at_col_time" style={{ color: isPlaying ? '#a855f7' : '#888' }}>{formatTime(song.duration)}</div>
-                                        <button className="btn_add_music_icon" disabled={isAdded} onClick={(e) => { e.stopPropagation(); handleAddTrack(song); }} title={isAdded ? t('playlist.alreadyAdded') : t('playlist.addTrack')}>
-                                            {isAdded ? '✓' : (
-                                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /><line x1="15" y1="9" x2="21" y2="9" /><line x1="18" y1="6" x2="18" y2="12" />
-                                                </svg>
-                                            )}
+                                        <button
+                                            className="btn_add_music_icon"
+                                            disabled={isAdded}
+                                            onClick={(e) => { e.stopPropagation(); handleAddTrack(song); }}
+                                            title={isAdded ? t('playlist.alreadyAdded') : t('playlist.addTrack')}
+                                        >
+                                            <div className={`icon add_track_icon ${isAdded ? 'add_track_icon--active' : ''}`} />
                                         </button>
                                     </div>
                                 );

@@ -1,6 +1,6 @@
 import { Fragment, useMemo } from 'react';
 import { useLocale } from '../context/LocaleContext';
-import { buildPlayerHotkeys } from '../i18n/hotkeys';
+import { buildPlayerHotkeys } from '../translations/hotkeys';
 
 // HotkeysTable: таблиця гарячих клавіш плеєра
 export default function HotkeysTable() {

@@ -1,6 +1,6 @@
 .help_fab {
     position: fixed;
-    bottom: 96px;
+    bottom: 24px;
     left: 24px;
     width: 50px;
     height: 50px;
@@ -17,6 +17,11 @@
     align-items: center;
     justify-content: center;
     transition: transform 0.2s;
+}
+
+/* Якщо міні-плеєр (нижня панель) видимий — піднімаємо кнопку над ним */
+body.has-player-bar .help_fab {
+    bottom: 96px;
 }
 
 .help_fab:hover {

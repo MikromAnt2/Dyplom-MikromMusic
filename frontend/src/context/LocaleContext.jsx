@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import uk from '../i18n/locales/uk.js';
-import en from '../i18n/locales/en.js';
+import uk from '../translations/locales/uk.js';
+import en from '../translations/locales/en.js';
 
 const STORAGE_KEY = 'mikrom-locale';
 const LOCALES = { uk, en };

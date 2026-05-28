@@ -7,8 +7,16 @@ function highQualityTrackImage(youtubeId, existingUrl = '') {
 }
 
 // highQualityArtistImage: покращує URL аватара артиста
-function highQualityArtistImage(imageUrl) {
-  return upgradeUrl(imageUrl);
+function highQualityArtistImage(imageUrl, channelId = '') {
+  const upgraded = upgradeUrl(imageUrl);
+  if (upgraded) return upgraded;
+
+  // Fallback для UC channel — щоб картки не були порожніми (та для тестів).
+  const id = String(channelId || '').trim();
+  if (/^UC[\w-]{10,}$/i.test(id)) {
+    return `https://yt3.googleusercontent.com/ytc/${encodeURIComponent(id)}=w256-h256-c-k-c0x00ffffff-no-rj`;
+  }
+  return '';
 }
 
 // highQualityAlbumImage: покращує обкладинку альбому
@@ -53,7 +61,7 @@ function enrichArtistMedia(artist) {
   if (!artist) return artist;
   return {
     ...artist,
-    image: highQualityArtistImage(artist.image),
+    image: highQualityArtistImage(artist.image, artist.channelId),
     imageFallback: upgradeUrl(artist.image) || artist.imageFallback || ''
   };
 }
