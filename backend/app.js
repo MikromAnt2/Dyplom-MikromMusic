@@ -59,6 +59,7 @@ app.use(streamRoutes);
 const frontendDist = path.resolve(__dirname, '..', 'frontend', 'dist');
 const indexHtml = path.join(frontendDist, 'index.html');
 if (fs.existsSync(indexHtml)) {
+    console.log(`[web] serving frontend from: ${frontendDist}`);
     app.use(express.static(frontendDist));
     // SPA fallback (do not override API/auth routes)
     app.get(/^\/(?!api\/|auth\/).*/, (req, res) => {
@@ -66,6 +67,7 @@ if (fs.existsSync(indexHtml)) {
     });
 } else {
     console.warn('[WARN] frontend/dist not found. Run `cd frontend && npm run build` for one-domain hosting.');
+    console.warn(`[WARN] expected: ${indexHtml}`);
 }
 
 app.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));
