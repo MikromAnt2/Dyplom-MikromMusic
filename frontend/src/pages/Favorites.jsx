@@ -76,6 +76,13 @@ export default function Favorites() {
         setIsBulkMenuOpen(false);
     }, [activeTab]);
 
+    const refreshHistory = () => {
+        fetch('/api/history', { credentials: 'include' })
+            .then(res => res.ok ? res.json() : [])
+            .then(data => setHistoryTracks(Array.isArray(data) ? data : []))
+            .catch(err => console.error(err));
+    };
+
     useEffect(() => {
         if (!user) return;
 
@@ -89,10 +96,14 @@ export default function Favorites() {
             .then(data => setLikedTracks(Array.isArray(data) ? data : []))
             .catch(() => setLikedTracks([]));
 
-        fetch('/api/history', { credentials: 'include' })
-            .then(res => res.ok ? res.json() : [])
-            .then(data => setHistoryTracks(Array.isArray(data) ? data : []))
-            .catch(err => console.error(err));
+        refreshHistory();
+    }, [activeTab, user]);
+
+    useEffect(() => {
+        if (!user || activeTab !== 'history') return undefined;
+        const onHistoryUpdated = () => refreshHistory();
+        window.addEventListener('mikrom-history-updated', onHistoryUpdated);
+        return () => window.removeEventListener('mikrom-history-updated', onHistoryUpdated);
     }, [activeTab, user]);
 
     if (!user) {

@@ -74,7 +74,11 @@ router.post('/api/register', async (req, res) => {
 
         req.login(user, (err) => {
             if (err) return res.status(500).json({ error: 'Помилка авторизації' });
-            res.json({ message: 'Реєстрація успішна', user });
+            req.session.userId = user.id;
+            const userObj = user.toJSON();
+            userObj.likedSongs = [];
+            delete userObj.passwordHash;
+            res.json({ message: 'Реєстрація успішна', user: userObj });
         });
     } catch (err) {
         console.error(err);

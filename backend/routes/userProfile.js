@@ -81,8 +81,6 @@ router.post('/api/history', isAuthenticated, async (req, res) => {
             { upsert: true, setDefaultsOnInsert: true, returnDocument: 'after' }
         );
 
-        // Зберігаємо подію прослуховування (не дедупимо по youtubeId),
-        // але тримаємо історію в межах останніх N записів.
         await ListeningHistory.create({ userId, youtubeId, playedAt: new Date() });
         const MAX_HISTORY = Math.min(Math.max(parseInt(process.env.HISTORY_MAX || '200', 10) || 200, 50), 1000);
         const total = await ListeningHistory.countDocuments({ userId });
@@ -117,10 +115,20 @@ router.get('/api/history', isAuthenticated, async (req, res) => {
         const songMap = {};
         songs.forEach(s => songMap[s.youtubeId] = s);
 
-        const result = history.map(h => {
+        const result = history.map((h) => {
             const songInfo = songMap[h.youtubeId];
-            return songInfo ? { ...songInfo.toObject(), playedAt: h.playedAt } : null;
-        }).filter(item => item !== null);
+            if (songInfo) {
+                return { ...songInfo.toObject(), playedAt: h.playedAt };
+            }
+            return {
+                youtubeId: h.youtubeId,
+                title: h.youtubeId,
+                author: '',
+                image: '',
+                duration: 0,
+                playedAt: h.playedAt
+            };
+        });
 
         res.json(result);
     } catch (err) {

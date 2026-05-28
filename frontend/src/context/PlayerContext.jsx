@@ -50,6 +50,11 @@ export function PlayerProvider({ children }) {
     const lastUserGestureAtRef = useRef(0);
     const playNextLockRef = useRef(false);
     const radioExpandPromiseRef = useRef(null);
+    const userRef = useRef(user);
+
+    useEffect(() => {
+        userRef.current = user;
+    }, [user]);
 
     // abortPendingResumeAndStop: скасовує resume і зупиняє YT + fallback
     const abortPendingResumeAndStop = useCallback(() => {
@@ -69,10 +74,10 @@ export function PlayerProvider({ children }) {
     useEffect(() => { playbackModeRef.current = playbackMode; }, [playbackMode]);
 
     // saveToHistory: зберігає прослуховування — API або guest localStorage
-    const saveToHistory = (song) => {
+    const saveToHistory = useCallback((song) => {
         const normalized = normalizeTrack(song);
         if (!normalized?.youtubeId) return;
-        if (!user) {
+        if (!userRef.current) {
             pushGuestListening(normalized.youtubeId);
             return;
         }
@@ -92,7 +97,10 @@ export function PlayerProvider({ children }) {
             body: JSON.stringify({ song: payload })
         })
             .then((res) => {
-                if (res?.ok) return;
+                if (res?.ok) {
+                    window.dispatchEvent(new CustomEvent('mikrom-history-updated'));
+                    return;
+                }
                 if (res?.status === 401) {
                     pushGuestListening(normalized.youtubeId);
                     return;
@@ -100,7 +108,7 @@ export function PlayerProvider({ children }) {
                 console.warn('[history] save failed:', res?.status);
             })
             .catch((err) => console.warn('[history] save error:', err));
-    };
+    }, []);
 
     // toggleLike: перемикає лайк треку — POST /api/like
     const toggleLike = async (song, options = {}) => {
@@ -114,6 +122,7 @@ export function PlayerProvider({ children }) {
             const res = await fetch('/api/like', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({
                     song: {
                         youtubeId: song.youtubeId,
@@ -237,6 +246,10 @@ export function PlayerProvider({ children }) {
             }
             return Boolean(ok);
         } catch (e) {
+            const msg = String(e?.message || e);
+            if (msg.includes('TEMP_UNAVAILABLE')) {
+                return false;
+            }
             console.error(`[fallback] switch failed (${reason}):`, e);
             fallbackFailureRef.current.add(song.youtubeId);
             setPlaybackMode('yt');
@@ -473,35 +486,35 @@ export function PlayerProvider({ children }) {
             showToast(t('toast.nowPlaying', { title: shortTitle(song.title) }), 'info');
         }
         return true;
-    }, [loadTrack, showToast, abortPendingResumeAndStop]);
+    }, [loadTrack, showToast, abortPendingResumeAndStop, saveToHistory]);
 
     // playNext: наступний трек — або розширення radio в кінці черги
     const playNext = useCallback(async () => {
-        if (playNextLockRef.current) return;
-        playNextLockRef.current = true;
         lastUserGestureAtRef.current = Date.now();
 
+        const currentQueue = queueRef.current;
+        const currIndex = currentIndexRef.current;
+        if (currentQueue.length === 0) return;
+
+        if (isRepeatingRef.current) {
+            playSpecificIndex(currIndex, { silent: true });
+            return;
+        }
+
+        if (currIndex < currentQueue.length - 1) {
+            playSpecificIndex(currIndex + 1, { silent: true });
+            if (currIndex + 1 >= currentQueue.length - 2) {
+                const seed =
+                    normalizeTrack(currentQueue[currIndex + 1]) ||
+                    normalizeTrack(currentQueue[currIndex]);
+                expandQueueWithRadio(seed).catch((e) => console.error('Prefetch radio:', e));
+            }
+            return;
+        }
+
+        if (playNextLockRef.current) return;
+        playNextLockRef.current = true;
         try {
-            const currentQueue = queueRef.current;
-            const currIndex = currentIndexRef.current;
-            if (currentQueue.length === 0) return;
-
-            if (isRepeatingRef.current) {
-                playSpecificIndex(currIndex, { silent: true });
-                return;
-            }
-
-            if (currIndex < currentQueue.length - 1) {
-                playSpecificIndex(currIndex + 1, { silent: true });
-                if (currIndex + 1 >= currentQueue.length - 2) {
-                    const seed =
-                        normalizeTrack(currentQueue[currIndex + 1]) ||
-                        normalizeTrack(currentQueue[currIndex]);
-                    expandQueueWithRadio(seed).catch((e) => console.error('Prefetch radio:', e));
-                }
-                return;
-            }
-
             const song = normalizeTrack(currentQueue[currIndex]);
             const added = await expandQueueWithRadio(song);
             const nextIdx = currentIndexRef.current + 1;
@@ -564,7 +577,7 @@ export function PlayerProvider({ children }) {
         if (!silent) {
             showToast(t('toast.nowPlaying', { title: shortTitle(normalized.title) }), 'info');
         }
-    }, [loadTrack, showToast, abortPendingResumeAndStop]);
+    }, [loadTrack, showToast, abortPendingResumeAndStop, saveToHistory]);
 
     // restorePlaybackSession: відновлює останню сесію з localStorage
     const restorePlaybackSession = useCallback(async ({ autoplay = true } = {}) => {
@@ -722,7 +735,7 @@ export function PlayerProvider({ children }) {
             'success'
         );
         return true;
-    }, [user?.id, loadTrack, applyPendingResume, showToast]);
+    }, [user?.id, loadTrack, applyPendingResume, showToast, saveToHistory]);
 
     // togglePlayPause: play/pause поточного треку — через yt API
     const togglePlayPause = useCallback(() => {

@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
     // checkAuthStatus: перевіряє сесію при старті — GET /api/current_user
     const checkAuthStatus = async () => {
         try {
-            const res = await fetch('/api/current_user');
+            const res = await fetch('/api/current_user', { credentials: 'include' });
             const userData = await res.json();
             setUser(userData && userData.displayName ? userData : null);
         } catch (err) {
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
     // logout: вихід з акаунту — POST /api/logout
     const logout = async () => {
         try {
-            const res = await fetch('/api/logout', { method: 'POST' });
+            const res = await fetch('/api/logout', { method: 'POST', credentials: 'include' });
             if (res.ok) {
                 setUser(null);
                 showToast(t('library.logoutSuccess'), 'info');
