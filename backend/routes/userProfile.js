@@ -81,9 +81,22 @@ router.post('/api/history', isAuthenticated, async (req, res) => {
             { upsert: true, setDefaultsOnInsert: true, returnDocument: 'after' }
         );
 
-        await ListeningHistory.deleteMany({ userId, youtubeId });
-
+        // Зберігаємо подію прослуховування (не дедупимо по youtubeId),
+        // але тримаємо історію в межах останніх N записів.
         await ListeningHistory.create({ userId, youtubeId, playedAt: new Date() });
+        const MAX_HISTORY = Math.min(Math.max(parseInt(process.env.HISTORY_MAX || '200', 10) || 200, 50), 1000);
+        const total = await ListeningHistory.countDocuments({ userId });
+        if (total > MAX_HISTORY) {
+            const overflow = total - MAX_HISTORY;
+            const old = await ListeningHistory.find({ userId })
+                .sort({ playedAt: 1 })
+                .limit(overflow)
+                .select({ _id: 1 });
+            const ids = old.map((d) => d._id).filter(Boolean);
+            if (ids.length) {
+                await ListeningHistory.deleteMany({ _id: { $in: ids } });
+            }
+        }
         await InteractionLog.create({ userId, youtubeId, action: 'play', listenDurationSeconds: song.listenDurationSeconds || 0 });
 
         res.json({ message: 'Додано до історії' });
