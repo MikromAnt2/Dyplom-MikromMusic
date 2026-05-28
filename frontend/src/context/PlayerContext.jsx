@@ -87,6 +87,7 @@ export function PlayerProvider({ children }) {
         fetch('/api/history', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ song: payload })
         }).catch((err) => console.error(err));
     };

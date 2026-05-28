@@ -64,6 +64,14 @@ export default function Header() {
                     <NavLink to="/" className="logo" title={t('header.logoTitle')}>
                         <img src={siteLogo} alt="Mikrom" />
                     </NavLink>
+                </div>
+
+                <div className="header_right">
+                    <nav className="header_nav">
+                        <NavLink to="/" className="nav_item" end>{t('header.home')}</NavLink>
+                        <NavLink to="/favorites" className="nav_item" id="nav_favorites">{t('header.library')}</NavLink>
+                    </nav>
+
                     <div className="search_bar">
                         <span className="search_icon_wrapper"><img src={searchIcon} alt="" /></span>
                         <input
@@ -80,13 +88,6 @@ export default function Header() {
                             spellCheck={false}
                         />
                     </div>
-                </div>
-
-                <div className="header_right">
-                    <nav className="header_nav">
-                        <NavLink to="/" className="nav_item" end>{t('header.home')}</NavLink>
-                        <NavLink to="/favorites" className="nav_item" id="nav_favorites">{t('header.library')}</NavLink>
-                    </nav>
 
                     <div className="lang_switch" ref={langRef}>
                         <button

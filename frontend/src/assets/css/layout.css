@@ -6,6 +6,7 @@
 .header_inner,
 .container {
     width: 1100px;
+    max-width: 1100px;
 }
 
 .main {
@@ -25,4 +26,39 @@
 
 .horizontal_list::-webkit-scrollbar {
     display: none;
+}
+
+/* =========================
+   Responsive (tablet/mobile)
+   ========================= */
+@media (max-width: 1200px) {
+    .header_inner,
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        margin-top: 72px;
+        margin-bottom: 160px;
+        min-height: calc(100vh - 72px - 160px);
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .header_inner,
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .horizontal_list {
+        gap: 14px;
+    }
 }

@@ -190,7 +190,8 @@ export default function ContextMenus() {
                             channelId: payload.navArtistChannelId || payload.channelId,
                             name: payload.navArtistName || formatArtistDisplay(payload.author),
                             subs: payload.navArtistSubs,
-                            image: payload.navArtistImage || payload.image
+                            image: payload.navArtistImage || payload.image,
+                            videoId: payload.navArtistVideoId || payload.youtubeId
                         });
                         closeMenu();
                         if (!ok) showToast(t('library.artistNotFound'), 'info');

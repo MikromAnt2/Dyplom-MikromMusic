@@ -101,11 +101,24 @@ export default function AuthModal() {
                         <form id="form_login" onSubmit={handleLoginSubmit}>
                             <div className="input_group">
                                 <label>{t('auth.email')}</label>
-                                <input type="email" name="email" placeholder={t('auth.emailPlaceholder')} required />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder={t('auth.emailPlaceholder')}
+                                    autoComplete="email"
+                                    inputMode="email"
+                                    required
+                                />
                             </div>
                             <div className="input_group">
                                 <label>{t('auth.password')}</label>
-                                <input type="password" name="password" placeholder={t('auth.passwordPlaceholder')} required />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder={t('auth.passwordPlaceholder')}
+                                    autoComplete="current-password"
+                                    required
+                                />
                             </div>
                             <button type="submit" className="btn_submit">{t('auth.submitLogin')}</button>
                         </form>
@@ -113,15 +126,34 @@ export default function AuthModal() {
                         <form id="form_register" onSubmit={handleRegisterSubmit}>
                             <div className="input_group">
                                 <label>{t('auth.displayName')}</label>
-                                <input type="text" name="displayName" placeholder={t('auth.displayNamePlaceholder')} required />
+                                <input
+                                    type="text"
+                                    name="displayName"
+                                    placeholder={t('auth.displayNamePlaceholder')}
+                                    autoComplete="username"
+                                    required
+                                />
                             </div>
                             <div className="input_group">
                                 <label>{t('auth.email')}</label>
-                                <input type="email" name="email" placeholder={t('auth.emailPlaceholder')} required />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder={t('auth.emailPlaceholder')}
+                                    autoComplete="email"
+                                    inputMode="email"
+                                    required
+                                />
                             </div>
                             <div className="input_group">
                                 <label>{t('auth.password')}</label>
-                                <input type="password" name="password" placeholder={t('auth.passwordNewPlaceholder')} required />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder={t('auth.passwordNewPlaceholder')}
+                                    autoComplete="new-password"
+                                    required
+                                />
                             </div>
                             <button type="submit" className="btn_submit">{t('auth.submitRegister')}</button>
                         </form>

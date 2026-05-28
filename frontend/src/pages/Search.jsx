@@ -135,7 +135,8 @@ export default function Search() {
             channelId: primaryArtist?.channelId || track.channelId,
             name: primaryArtist?.name || author,
             subs: primaryArtist?.subs,
-            image: primaryArtist?.image
+            image: primaryArtist?.image,
+            videoId: track.youtubeId
         });
         if (!ok) showToast(t('library.artistNotFound'), 'info');
     };

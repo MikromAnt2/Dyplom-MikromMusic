@@ -4,7 +4,9 @@ import { formatArtistDisplay } from './media';
 function resolveArtistSearchName(author, name) {
     const raw = formatArtistDisplay(name || author || '');
     if (!raw) return '';
-    const first = raw.split(/\s*[,;&]|\s+feat\.|\s+ft\./i)[0].trim();
+    // Не ріжемо по "&" — у багатьох артистів це частина назви (наприклад "Myth&Roid")
+    // Ріжемо лише по комі/крапці з комою або по "feat/ft"
+    const first = raw.split(/\s*[,;]|\s+feat\.|\s+ft\./i)[0].trim();
     return first || raw;
 }
 
@@ -92,6 +94,7 @@ export function attachSearchArtistNav(track, primaryArtist) {
         navArtistChannelId: primaryArtist?.channelId || track.channelId || '',
         navArtistName: primaryArtist?.name || author,
         navArtistSubs: primaryArtist?.subs || '',
-        navArtistImage: primaryArtist?.image || track.image || ''
+        navArtistImage: primaryArtist?.image || track.image || '',
+        navArtistVideoId: track.youtubeId || track.videoId || ''
     };
 }

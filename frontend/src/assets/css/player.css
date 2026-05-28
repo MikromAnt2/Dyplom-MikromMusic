@@ -65,6 +65,36 @@
     flex-shrink: 0;
 }
 
+/* =========================
+   Responsive player
+   ========================= */
+@media (max-width: 768px) {
+    .player_inner {
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 10px;
+        padding: 0 12px;
+    }
+    .player_right {
+        display: none;
+    }
+    .song_img {
+        width: 44px;
+        height: 44px;
+    }
+    .time_display {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .player_inner {
+        padding: 0 10px;
+    }
+    .main_controls {
+        gap: 12px;
+    }
+}
+
 
 #yt-audio-dock {
     position: fixed;

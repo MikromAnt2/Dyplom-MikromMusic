@@ -146,9 +146,27 @@ function filterQualityArtists(artists, query, max = 12) {
 
   if (withListeners.length > 0) return withListeners;
 
-  return byScore(
-    pool.filter((a) => a?.channelId && nameSimilarity(a.name, q) >= 0.55)
-  ).slice(0, Math.min(max, 6));
+  // Якщо "listeners" ще не вдалось підтягнути (або їх мало) — все одно показуємо артистів,
+  // щоб секція "Виконавці" не зникала на реальних запитах.
+  const fallback = byScore(
+    pool.filter((a) => {
+      if (!a?.channelId) return false;
+      const sim = nameSimilarity(a.name, q);
+      if (sim >= 0.55) return true;
+      // більш м'який поріг для коротких запитів типу "Mili", "Eve", "Aimer"
+      if (q.length <= 5 && sim >= 0.45) return true;
+      // якщо запит є підрядком назви (без суворої метрики)
+      const nLow = String(a.name || '').toLowerCase();
+      const qLow = String(q || '').toLowerCase();
+      if (qLow.length >= 3 && nLow.includes(qLow)) return true;
+      return false;
+    })
+  ).slice(0, Math.min(max, 8));
+
+  if (fallback.length) return fallback;
+
+  // останній шанс — просто топ за скором, щоб не було порожньо
+  return byScore(pool.filter((a) => a?.channelId)).slice(0, Math.min(max, 4));
 }
 
 // rankTracks: топ треків за scoreTrackMatch

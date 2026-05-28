@@ -456,9 +456,9 @@ export default function Playlist() {
                                 </span>
                             )
                         ) : playlist.ownerId ? (
-                            <Link to={`/user/${playlist.ownerId}`} style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
+                            <span style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
                                 {playlist.ownerName}
-                            </Link>
+                            </span>
                         ) : (
                             <span style={{ color: '#fff', fontWeight: 'bold' }}>
                                 {playlist.ownerName}
