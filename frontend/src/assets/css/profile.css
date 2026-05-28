@@ -1,0 +1,71 @@
+
+.profile_layout {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+.profile_left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 200px;
+}
+
+.profile_avatar_large {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    font-weight: 600;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.btn_change_avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn_change_avatar:hover {
+    border-color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+.profile_right {
+    flex: 1;
+    background: #181818;
+    padding: 32px 40px;
+    border-radius: 12px;
+    border: 1px solid #222;
+}
+
+.profile_input {
+    width: 100%;
+    background: #121212;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.profile_input:focus {
+    border-color: #a855f7;
+}
+

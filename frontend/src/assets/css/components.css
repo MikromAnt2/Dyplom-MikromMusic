@@ -1,0 +1,174 @@
+
+
+.section_subtitle {
+    font-size: 12px;
+    color: #888;
+    font-weight: 500;
+}
+
+
+.artist_card {
+    --card-size: 130px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(var(--card-size) + 27px);
+    max-width: 100%;
+}
+
+.artist_card--md {
+    --card-size: 120px;
+}
+
+.artist_card--sm {
+    --card-size: 100px;
+}
+
+.artist_card img {
+    width: var(--card-size);
+    height: var(--card-size);
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.artist_card .channel_name {
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+
+.artist_card--sm .channel_name {
+    font-size: 13px;
+}
+
+.artist_card .channel_subs {
+    font-size: 11px;
+    color: #b3b3b3;
+    text-align: center;
+    margin-top: 4px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.skeleton_row {
+    display: flex;
+    gap: 16px;
+    overflow: hidden;
+    padding-bottom: 8px;
+}
+
+.skeleton_item {
+    flex-shrink: 0;
+}
+
+.skeleton_cover {
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+}
+
+.skeleton_cover--artist {
+    border-radius: 50%;
+}
+
+.skeleton_cover--card {
+    border-radius: 8px;
+}
+
+.skeleton_line {
+    height: 12px;
+    width: 80%;
+    margin-top: 10px;
+    border-radius: 4px;
+    background: #222;
+}
+
+
+.empty_state {
+    padding: 24px 8px 32px;
+    color: #888;
+    font-size: 14px;
+}
+
+.empty_state p {
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+}
+
+.empty_state .btn_mix {
+    padding: 8px 18px;
+    font-size: 13px;
+}
+
+.empty_state_title {
+    display: block;
+    color: #ccc;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.section_state--loading {
+    padding: 8px 0 24px;
+}
+
+.section_state_loading_text {
+    color: #888;
+    font-size: 14px;
+    margin: 0 0 16px 0;
+    text-align: center;
+}
+
+.search_layout_hint {
+    margin: 0 0 24px 0;
+    padding: 12px 16px;
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 8px;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.search_layout_hint_btn {
+    background: none;
+    border: none;
+    color: #a855f7;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    text-decoration: underline;
+}
+
+.search_layout_hint_btn:hover {
+    color: #c084fc;
+}
+
+.search_results_skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 16px 0;
+}
+
+.search_skeleton_block {
+    height: 120px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: skeleton_shimmer 1.4s ease-in-out infinite;
+}
+
+.search_skeleton_block--tall {
+    height: 200px;
+}

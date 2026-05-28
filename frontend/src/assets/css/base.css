@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    background: var(--color-bg);
+    font-family: var(--font-main);
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+input {
+    outline: none;
+    border: none;
+}
+
+.genre_artists_row .channel,
+.genre_tracks_row .card {
+    flex-shrink: 0;
+}
+
+button {
+    background: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.horizontal_list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    
+    scrollbar-width: none; 
+}
+.horizontal_list::-webkit-scrollbar {
+    display: none; 
+}

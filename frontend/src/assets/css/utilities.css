@@ -1,0 +1,81 @@
+.hide {
+    display: none !important;
+}
+
+@keyframes skeleton_shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton_pulse {
+    animation: skeleton_shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.loader_spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #222;
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.global_loader {
+    position: fixed;
+    inset: 0;
+    background: var(--color-bg);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.global_loader.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+.is-playing .track_number,
+.is-playing .tt_index {
+    color: var(--color-accent);
+}
+
+.is-playing .tt_title,
+.is-playing .pv_track_name {
+    color: var(--color-accent);
+}
+
+.play_icon--row {
+    transform: scale(0.5);
+    position: relative;
+    top: 3px;
+}
+
+.pv_track_row--with-album {
+    grid-template-columns: 50px 3fr 2fr 2fr 80px 40px;
+}
+
+.pv_track_row--compact {
+    grid-template-columns: 50px 1fr 80px 40px;
+}
+
+.context-menu-item--danger {
+    color: #ff4d4d;
+}
+
+.track_checkbox {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+}

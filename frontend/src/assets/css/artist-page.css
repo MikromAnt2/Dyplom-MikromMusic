@@ -1,0 +1,303 @@
+
+
+.page_message {
+    padding: 40px;
+    color: #fff;
+}
+
+.page_message .btn_mix {
+    margin-top: 16px;
+}
+
+.artist_subs_count {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    opacity: 0.9;
+}
+
+.btn_mix .play_icon--sm {
+    transform: scale(0.4);
+    margin: -10px;
+    filter: brightness(10);
+}
+
+.pv_title_heart_btn--show,
+.pv_action_btn--show {
+    opacity: 1;
+}
+
+.pv_action_btn--lg {
+    font-size: 20px;
+}
+
+.pv_title_heart_btn--spaced {
+    margin-left: 10px;
+}
+
+.section_block--gap-top {
+    margin-top: 40px;
+}
+
+.block_title--gap {
+    margin-bottom: 15px;
+}
+
+.block_title--sm {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.block_title--row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.block_title--row .link_more {
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.block_title--lg {
+    margin: 0;
+    font-size: 20px;
+}
+
+.section_block--full {
+    width: 100%;
+}
+
+.horizontal_list--wrap {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.card_sub--type {
+    font-size: 11px;
+    margin-top: 2px;
+    color: #888;
+}
+
+.artist_discography_wrap {
+    width: 100%;
+    padding-bottom: 60px;
+    margin-top: 20px;
+}
+
+.artist_side_link {
+    margin-bottom: 40px;
+    cursor: pointer;
+}
+
+.fav_widget--sidebar {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    gap: 12px;
+}
+
+.fav_widget_icon--round {
+    background: rgba(168, 85, 247, 0.2);
+    border-radius: 50%;
+}
+
+.fav_widget_icon--round .heart_icon_fav {
+    transform: scale(1);
+}
+
+.fav_widget_title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.fav_widget_count {
+    font-size: 11px;
+    color: #888;
+}
+
+.similar_artists_list--compact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sa_row--compact {
+    height: 50px;
+    margin-bottom: 0;
+}
+
+.sa_avatar--sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.sa_info--clip {
+    overflow: hidden;
+}
+
+.latest_release_card .lr_thumb {
+    width: 130px;
+    height: 130px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.lr_info--center {
+    justify-content: center;
+}
+
+.lr_type {
+    color: #a855f7;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.text_empty_hint {
+    color: #555;
+}
+
+.tt_views {
+    color: #888;
+    font-size: 13px;
+    width: 80px;
+    text-align: right;
+    padding-right: 20px;
+    flex-shrink: 0;
+}
+
+.tab_header_flex h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.pv_search_add--icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.pv_search_add--icon .search_icon_in_field {
+    position: absolute;
+    left: 8px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
+    pointer-events: none;
+    transform: scaleX(-1);
+}
+
+.pv_search_add--icon input {
+    padding: 8px 16px 8px 40px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    outline: none;
+    font-size: 15px;
+    width: 100%;
+}
+
+.pv_col_date--views {
+    color: #fff;
+    font-weight: 500;
+}
+
+.artist_loading_more {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #a855f7;
+    font-weight: bold;
+}
+
+.similar_tab_title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+}
+
+.similar_artists_grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.channel--similar-card {
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+}
+
+.channel--similar-card img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.channel--similar-card .channel_name {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.channel--similar-card .channel_subs {
+    color: #888;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 4px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text_muted_block {
+    color: #888;
+    margin-top: 20px;
+}
+
+.context-menu--fixed {
+    position: fixed;
+    z-index: 9999;
+}
+
+.context-menu--bulk {
+    position: absolute;
+    top: 100%;
+    right: 30px;
+    z-index: 10050;
+    min-width: 220px;
+}
+
+.artist_actions .share_link_btn {
+    background-image: none !important;
+}
+
+.pv_col_checkbox--rel {
+    position: relative;
+}
+
+
+.pv_track_header .col_time_center {
+    text-align: center;
+}

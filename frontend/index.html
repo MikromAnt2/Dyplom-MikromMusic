@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikrom - Music Platform</title>
+    <link rel="preconnect" href="https://www.youtube.com">
+    <link rel="preconnect" href="https://www.google.com">
+    <link rel="dns-prefetch" href="https://www.youtube.com">
+    <link rel="dns-prefetch" href="https://i.ytimg.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<script>
+    window.__ytReadyQueue = window.__ytReadyQueue || [];
+    var _prevYtApiReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+        if (typeof _prevYtApiReady === 'function') _prevYtApiReady();
+        (window.__ytReadyQueue || []).forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } });
+        window.__ytReadyQueue = [];
+    };
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<div id="yt-audio-dock" aria-hidden="true">
+    <div id="yt-player-host" class="yt-host--hidden">
+        <div id="yt-player"></div>
+    </div>
+</div>
+<script type="module" src="/src/ytBoot.js"></script>
+<div id="root"></div>
+<script type="module" src="/src/Main.jsx"></script>
+</body>
+</html>
