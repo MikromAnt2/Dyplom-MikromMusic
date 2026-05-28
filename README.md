@@ -41,8 +41,6 @@ DATABASE_URL=postgres://user:password@localhost:5432/mikrom
 
 # youtube
 YT_API_KEY=YOUR_KEY
-# або кілька ключів через кому:
-# YT_API_KEY=KEY
 ```
 
 > Backend підхоплює `.env` як `require('dotenv').config({ path: '../.env' });` у `backend/app.js`.
